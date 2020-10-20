@@ -7,6 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -66,6 +67,13 @@ class GenerateQrCodeCommand extends Command
             ->subject('QR code for '.$email)
             ->text('QR code attached');
 
-        $this->mailer->send($message);
+        try {
+            $this->mailer->send($message);
+            unlink($this->projectDir.'/var/cache/qrcode.png');
+        } catch (TransportExceptionInterface $e) {
+            unlink($this->projectDir.'/var/cache/qrcode.png');
+
+            throw $e;
+        }
     }
 }
