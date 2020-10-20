@@ -1,0 +1,16 @@
+{
+  "name": "walczakmac/2fa-qr-code-generator",
+  "require": {
+    "php": "^7.4",
+    "ext-json": "*",
+    "symfony/console": "^5.1",
+    "spomky-labs/otphp": "^10.0",
+    "symfony/mailer": "^5.1",
+    "symfony/dotenv": "^5.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  }
+}

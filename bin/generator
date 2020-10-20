@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use QrCodeGenerator\Command\GenerateQrCodeCommand;
+use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+
+$application = new Application();
+
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__.'/../.env');
+
+$transport = new EsmtpTransport($_ENV['MAILER_HOST'], $_ENV['MAILER_PORT']);
+$transport->setUsername($_ENV['MAILER_USER']);
+$transport->setPassword($_ENV['MAILER_PASS']);
+$mailer = new Mailer($transport);
+
+$application->add(new GenerateQrCodeCommand($mailer, $_ENV['PROJECT_DIR']));
+
+$application->run();
